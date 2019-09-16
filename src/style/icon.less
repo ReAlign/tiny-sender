@@ -1,0 +1,105 @@
+@import "./icon-config.less";
+@import "./color.less";
+
+.icon-normal {
+    display: inline-block;
+    position: relative;
+
+    width: @icon-width * @icon-ratio;
+    height: @icon-height * @icon-ratio;
+
+    border-radius: 50%;
+    border: @icon-border-size * @icon-ratio solid @color-normal;
+}
+
+.icon-before-after {
+    content: '';
+    display: inline-block;
+    position: absolute;
+}
+
+@success-after-width: 7px * @icon-ratio;
+@success-after-height: 4px * @icon-ratio;
+@success-line-width: @icon-border-size * @icon-ratio;
+@success-after-top: 3px * @icon-ratio;
+@success-after-left: 2px * @icon-ratio;
+.icon-success {
+    .icon-normal;
+
+    &::after {
+        .icon-before-after;
+        width: @success-after-width;
+        height: @success-after-height;
+        border-bottom: @success-line-width solid @color-normal;
+        border-left: @success-line-width solid @color-normal;
+        top: @success-after-top;
+        left: @success-after-left;
+        transform: rotate(-45deg);
+    }
+}
+
+@info-fs: 12px * @icon-ratio;
+@info-top: 1px * @icon-ratio;
+@info-left: 5px * @icon-ratio;
+.icon-info {
+    .icon-normal;
+
+    &::after {
+        .icon-before-after;
+
+        content: 'i';
+        color: @color-normal;
+        font-family: -webkit-pictograph;
+        font-size: @info-fs;
+        font-weight: bold;
+        line-height: @info-fs;
+        top: @info-top;
+        left: @info-left;
+        transform: scale(0.9) translate(-12%, 0);
+    }
+}
+
+@warning-fs: 12px * @icon-ratio;
+@warning-top: 1px * @icon-ratio;
+@warning-left: 5px * @icon-ratio;
+.icon-warning {
+    .icon-normal;
+
+    &::after {
+        .icon-before-after;
+
+        content: '!';
+        color: @color-normal;
+        font-family: -webkit-pictograph;
+        font-size: @warning-fs;
+        font-weight: bold;
+        line-height: @warning-fs;
+        top: @warning-top;
+        left: @warning-left;
+        transform: scale(0.9) translate(-12%, 0);
+    }
+}
+
+@error-top: 2px * @icon-ratio;
+@error-left: ((@icon-width - 1px) / 2) * @icon-ratio;
+@error-height: (@icon-width - 4px) * @icon-ratio;
+.icon-error {
+    .icon-normal;
+
+    &::before,
+    &::after {
+        .icon-before-after;
+        top: @error-top;
+        left: @error-left;
+
+        width: @icon-border-size * @icon-ratio;
+        height: @error-height;
+        background: @color-normal;
+
+        transform: rotate(45deg);
+    }
+
+    &::after {
+        transform: rotate(-45deg);
+    }
+}
