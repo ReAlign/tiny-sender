@@ -88,14 +88,15 @@ class Notify {
     }
 }
 
-function showTips(msg, status) {
-    new Notify({ msg, status });
+function tips(msg, status, delay) {
+    new Notify({ msg, status, delay });
 }
 
 function error(msg = '服务器异常，请稍后再试') {
-    showTips(msg, 'error');
+    tips(msg, 'error');
 }
 
 export default {
+    tips,
     error
 };

@@ -54,7 +54,7 @@ class TinySender {
         const _axios_ = config.axios || window.axios || null;
         if(_axios_) {
             // axios 实例
-            self.axios = self.makeAxios();
+            self.axios = self.makeAxios(_axios_);
         } else {
             //
         }

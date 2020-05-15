@@ -37,7 +37,7 @@ export default {
     ...baseConfig.plugins,
     serve({
       port: 8083,
-      contentBase: [''],
+      contentBase: ['dist'],
     }),
   ],
 };

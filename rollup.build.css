@@ -131,6 +131,12 @@
 .m-ts-notify.u-in {
   right: 10px;
 }
+.m-ts-notify.u-simple {
+  background: #ffffff;
+  border: 1px solid #909399;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  color: #666;
+}
 .m-ts-notify.u-success {
   background: #67c23a;
   border: 1px solid #67c23a;
