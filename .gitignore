@@ -1,9 +1,0 @@
-.DS_Store
-.classpath
-.project
-.idea/
-.vscode/
-dist
-ex
-node_modules/
-package-lock.json
