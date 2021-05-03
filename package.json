@@ -1,0 +1,31 @@
+{
+  "name": "tiny-sender",
+  "description": "A tiny HTTP client, built-in xhr and progress and notify, also can config use axios.",
+  "version": "0.0.2",
+  "source": "src/index.ts",
+  "main": "dist/tiny-sender.js",
+  "module": "dist/tiny-sender.module.js",
+  "unpkg": "dist/tiny-sender.umd.js",
+  "exports": {
+    ".": "./dist/tiny-sender.modern.js"
+  },
+  "types": "dist/index.d.ts",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "rmdist": "rimraf dist/",
+    "dev:watch": "microbundle watch --no-compress --external none --css inline --name TinySender --output dist/",
+    "dev": "npm run rmdist && npm run dev:watch",
+    "build:uncompressed": "microbundle --no-sourcemap --external none --css inline --name TinySender --output dist/",
+    "build": "npm run rmdist && npm run build:uncompressed",
+    "prepublish": "npm run build"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.25.0",
+    "less": "^4.1.1",
+    "microbundle": "^0.13.0",
+    "nprogress": "^0.2.0",
+    "rimraf": "^3.0.2",
+    "typedoc": "^0.20.36"
+  }
+}

@@ -1,0 +1,24 @@
+//下面是使用函数生成margin类名的方式
+//定义margin数组
+@1px: 1px;
+@marginList: 1, 2, 3, 4, 5, 6, 7, 8;
+
+.bar-height-loop(@list, @i : 1, @val : extract(@list, @i)) when (length(@list) >=@i) {
+  .bar.bar-height-@{val} {
+    height: @val * 1px;
+  }
+
+  .bar-height-loop(@list, (@i + 1));
+}
+
+.f-cb {
+  zoom: 1;
+}
+
+.f-fl {
+  float: left;
+}
+
+.f-fr {
+  float: right;
+}
