@@ -41,7 +41,7 @@ export default function XHR_CORE(url: string, options: AjaxOptionsProps): Promis
     const xhr = new XMLHttpRequest();
 
     xhr.open(method, url);
-    xhr.withCredentials = true;
+    xhr.withCredentials = false;
 
     for (let key in headers) {
       xhr.setRequestHeader(key, headers[key]);

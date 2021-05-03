@@ -98,7 +98,7 @@ class TinySender {
       if (code && code === 200) {
         return successHandler(json);
       } else {
-        const msg = Result.getMsg(json, this.msgKeys).smg;
+        const msg = Result.getMsg(json, this.msgKeys).msg;
         this.notify.error(msg || this.ERR_MSG_NOT_200);
         return errorHandler(json);
       }
