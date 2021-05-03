@@ -13,13 +13,14 @@ export function beforeError(error) {
   return Promise.reject(error);
 }
 
-export function after(response, formatOptions, TS) {
-  const res = response.data || {};
+export async function after(response, formatOptions, TS) {
+  // const res = response.data || {};
 
-  const code = Result.getCode(res, TS.codeKeys).code;
+  const code = Result.getCode(response, TS.codeKeys).code;
+
+  // 全局非 200 报错
   if (code !== 200) {
-    // 全局非 200 报错
-    const msg = Result.getMsg(res, TS.msgKeys).smg;
+    const msg = Result.getMsg(response, TS.msgKeys).msg;
     TS.notify.error(msg || TS.ERR_MSG_NOT_200);
   }
 

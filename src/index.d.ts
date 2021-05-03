@@ -15,6 +15,8 @@ export interface ConfigProps {
   barEl: any;
   barHeight: number;
   barStriped: boolean;
+
+  after: any;
   axios: any;
   //
   timeout: number;

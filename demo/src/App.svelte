@@ -1,15 +1,18 @@
 <script>
   import TinySender from './../../dist/tiny-sender.module';
-  import axios from 'axios';
-
   export const name = 'ReAlign';
   export const url = 'https://nei.netease.com/api/apimock-v2/81167d00d866ed824b3b9025a2aeb9b9/demo/get';
-  export const tinySender = new TinySender();
+  export const tinySender = new TinySender({
+    async after(response, formatOptions, TS) {
+      TS.notify.tips('sadfghjkl', 'success');
+
+      return response;
+    }
+  });
   const getData = async () => {
     try {
-      const a = await tinySender.get(url);
+      const a = await tinySender.get(url, { data: { x: '  c  c ', l: 'd     ' } });
       const x = JSON.stringify(a, null, 2);
-      // tinySender.notify.tips(x, 'simple');
       return x;
     } catch(err) {
       console.log(err);

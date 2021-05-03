@@ -1,10 +1,4 @@
-import TinySender from '@/index';
-
-export function getNumber(val) {
-  return parseInt(val) || 4;
-}
-
-export function NProgressConfig(TS: TinySender) {
+export function getConfig(TS: any) {
   const {
     barEl = 'body',
     barHeight = 4,
@@ -31,4 +25,9 @@ export function NProgressConfig(TS: TinySender) {
   };
 }
 
-export default {};
+export function injectStyle(styles: string) {
+  const styleElement: HTMLStyleElement = document.createElement('style');
+  styleElement.innerHTML = styles;
+  document.head.appendChild(styleElement);
+}
+

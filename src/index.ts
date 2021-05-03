@@ -4,21 +4,16 @@ import {
   EWindow,
 } from '@/index.d';
 
-// import './style/nprogress.less';
-// import './style/notify.less';
-import nprogressStyles from './style/nprogress.less';
-import notifyStyles from './style/notify.less';
-import injectStyle from '@/style/inject';
 import { extend } from '@/lib/_';
 import {
   loadingHandler,
-  successHandler,
-  errorHandler
 } from '@/lib/handler';
+import {
+  after,
+} from '@/lib/interceptors';
 import Cancel from '@/lib/cancel';  // 取消
-import { getNumber } from '@/lib/config';  // 配置
 import Result from '@/lib/result';  // 返回
-import Notify from '@/lib/notify';  // 通知
+import Notify from '@/lib/notify/notify';  // 通知
 import getCorer from '@/lib/core/get-corer';
 
 /**
@@ -41,7 +36,9 @@ class TinySender {
   barHeight: number;
   barStriped: boolean;
   CancelToken: any;
-  corer: any;
+  corer: (options: AjaxOptionsProps) => Promise<any>;
+
+  after: (json: any, options: any, TS: any) => Promise<any>
   constructor(baseConfig: ConfigProps) {
     const {
       codeKeys = [],
@@ -52,6 +49,8 @@ class TinySender {
       barEl,
       barHeight,
       barStriped,
+
+      after,
     } = baseConfig || {};
 
     // 属性
@@ -69,7 +68,7 @@ class TinySender {
     // 进度条插入位置，默认 body
     this.barEl = barEl;
     // 进度条高度：默认 4px
-    this.barHeight = getNumber(barHeight);
+    this.barHeight = barHeight;
     // 进度条动画：默认：false
     this.barStriped = barStriped || false;
     // 取消
@@ -77,32 +76,23 @@ class TinySender {
     // 异步核心
     this.corer = getCorer(this, baseConfig);
 
-    /*-- 进度条 --*/
-    // 插入样式
-    injectStyle(nprogressStyles);
-    injectStyle(notifyStyles);
+    this.after = after;
   }
 
   // 发起请求
   async ajax(url: string, options: AjaxOptionsProps) {
+    options = { url, ...options };
     // 设置加载状态
     loadingHandler(options, true);
 
     try {
-      const json = await this.corer(url, options);
+      const json = await this.corer(options);
 
       // 取消加载状态
       loadingHandler(options, false);
 
-      const code = Result.getCode(json, this.codeKeys).code;
-      if (code && code === 200) {
-        return successHandler(json);
-      } else {
-        const msg = Result.getMsg(json, this.msgKeys).msg;
-        this.notify.error(msg || this.ERR_MSG_NOT_200);
-        return errorHandler(json);
-      }
-
+      // use after
+      return await (this.after ? this.after(json, options, this) : after(json, options, this));
     } catch (err) {
       // // 取消加载状态
       // loadingHandler(options, false);

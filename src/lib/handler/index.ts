@@ -4,6 +4,7 @@ import {
 
 import NProgress from 'nprogress';
 
+// 加载
 export function loadingHandler(options: AjaxOptionsProps, loading: boolean) {
   const {
     progress = true,
@@ -23,13 +24,13 @@ export function loadingHandler(options: AjaxOptionsProps, loading: boolean) {
   }
 }
 
-// 句柄：成功
+// 成功
 export function successHandler(res = {}) {
   // u.do4End({ res, attach });
   return Promise.resolve(res);
 }
 
-// 句柄：失败
+// 失败
 export function errorHandler(res = {}) {
   // u.do4End({ res, attach });
   return Promise.reject(res);

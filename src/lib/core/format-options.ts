@@ -1,8 +1,11 @@
 import {
   AjaxOptionsProps,
 } from '@/index.d';
-
-import { extend, queryString } from '@/lib/_';
+import {
+  deepTrim,
+  extend,
+  queryString,
+} from '@/lib/_';
 
 const CONTENT = {
   FORM: 'application/x-www-form-urlencoded',
@@ -30,33 +33,26 @@ const transformUrl = (url, data) => {
   return urlParts.filter(item => !!item).join('?');
 };
 
-// 如果不是完整的url，补全域名
 const resolveUrl = (url) => {
-  // const prefix = `https://${domain}`;
-  // if (/^(\/\/)+/.test(url)) return url;
-  // if (!/^https?/.test(url)) {
-  //   if (url.indexOf('/') === 0) {
-  //     return `${prefix}${url}`;
-  //   }
-  //   return `${prefix}/${url}`;
-  // }
   return url;
 };
 
-export default (url: string, option: AjaxOptionsProps): AjaxOptionsProps => {
+export default (option: AjaxOptionsProps): AjaxOptionsProps => {
   const {
+    url = '',
     method = 'GET',
     norest = false,
     timeout = 3000,
     headers = {},
     data = {},
+    trim = true,
     progress = true,
     onProgress,
   } = option || {};
 
   let _url = resolveUrl(url);
   let _method = (method || METHOD.GET).toUpperCase();
-  let _data = data;
+  let _data = trim ? deepTrim(data) : data;
   const _headers = Object.assign({}, defaultHeaders, headers, {
     'Content-Type': norest ? CONTENT.FORM : CONTENT.JSON,
   });

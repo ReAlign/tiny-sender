@@ -15,22 +15,21 @@ export default (axios) => {
   axios.defaults.onDownloadProgress = updatePercentage;
   axios.defaults.onUploadProgress = updatePercentage;
 
-  return async function AXIOS_CORE(url: string, options: AjaxOptionsProps): Promise<any> {
+  return async function AXIOS_CORE(options: AjaxOptionsProps): Promise<any> {
     const {
+      url,
       method,
       // timeout,
       headers,
       data,
       // onProgress,
-    } = formatOptions(url, options);
+    } = formatOptions(options);
 
-    const config = {
+    return await axios({
       headers,
       url,
       method,
       data,
-    };
-    const res = await axios(config);
-    return (res || {}).data || {};
+    });
   };
 };

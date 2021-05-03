@@ -1,5 +1,9 @@
-import { uuidMaker } from '@/lib/util';
-import dom from '@/lib/dom';
+import {
+  uuidMaker,
+  injectStyle
+ } from './util';
+import dom from './dom';
+import notifyStyles from './style/notify.less';
 
 class Notify {
   msg: any;
@@ -35,8 +39,12 @@ class Notify {
     this.main();
   }
   main() {
+    this.injectStyle();
     this.createDom();
     this.show();
+  }
+  injectStyle() {
+    injectStyle(notifyStyles);
   }
   createDom() {
     const self = this;
@@ -44,9 +52,9 @@ class Notify {
     self.ele = document.createElement('div');
     self.ele.id = uuidMaker(new Date);
     self.ele.innerHTML = `
-            <span class="u-notify-icon icon-${self.status}"></span>
-            <span class="u-msg">${self.msg}</span>
-        `;
+      <span class="u-notify-icon icon-${self.status}"></span>
+      <span class="u-msg">${self.msg}</span>
+    `;
 
     self.ele.className = `${self.clsMain} ${self.clsNone} u-${self.status}`;
     document.body.appendChild(self.ele);

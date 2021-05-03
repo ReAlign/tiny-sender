@@ -14,7 +14,9 @@ function transformResponseData(xhr) {
   if (typeof data === 'string') {
     try {
       data = JSON.parse(data);
-    } catch (e) {/*eslint-disable-line*/ }
+    } catch (e) {
+      //
+    }
   }
   return data;
 }
@@ -25,14 +27,15 @@ function createError(option) {
   return extend(error, option);
 }
 
-export default function XHR_CORE(url: string, options: AjaxOptionsProps): Promise<any> {
+export default function XHR_CORE(options: AjaxOptionsProps): Promise<any> {
   const {
+    url,
     method,
     timeout,
     headers,
     data,
     onProgress,
-  } = formatOptions(url, options);
+  } = formatOptions(options);
   return new Promise(
     (
       resolve: (data: any) => void,
