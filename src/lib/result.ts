@@ -1,12 +1,9 @@
 import { typeOf } from '@/lib/_';
 
-const result: any = {};
-
-result.CODE = ['code'];
-result.MSG = ['msg'];
-result.ERR_MSG_NOT_200 = '请求失败，（返回非 200）';
-result.ERR_MSG_NO_RES = '请求失败，（无返回值）';
-
+const result = {
+  CODE: ['code'],
+  MSG: ['msg'],
+};
 const _get = (type = '', res = {}, codeArr = []) => {
   const TYPE_MAP = {
     code: 'number',
@@ -42,7 +39,8 @@ const _get = (type = '', res = {}, codeArr = []) => {
   return obj;
 };
 
-result.getCode = (res, arr) => _get('code', res, arr);
-result.getMsg = (res, arr) => _get('msg', res, arr);
+export const ERR_MSG_NOT_200 = '请求失败，（返回非 200）';
+export const ERR_MSG_NO_RES = '请求失败，（无返回值）';
 
-export default result;
+export const getCode = (res, arr) => _get('code', res, arr);
+export const getMsg = (res, arr) => _get('msg', res, arr);

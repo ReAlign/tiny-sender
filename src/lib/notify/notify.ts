@@ -1,7 +1,7 @@
 import {
   uuidMaker,
   injectStyle
- } from './util';
+} from './util';
 import dom from './dom';
 import notifyStyles from './style/notify.less';
 
@@ -105,15 +105,12 @@ class Notify {
   }
 }
 
-function tips(msg, status, delay) {
+export function tips(msg, status, delay) {
   new Notify({ msg, status, delay });
 }
-
-function error(msg = '服务器异常，请稍后再试') {
+export function success(msg = '请求成功') {
+  tips(msg, 'success', 3000);
+}
+export function error(msg = '服务器异常，请稍后再试') {
   tips(msg, 'error', 3000);
 }
-
-export default {
-  tips,
-  error
-};

@@ -1,9 +1,15 @@
+export function endWith(str: string, endStr: string) {
+  const d = str.length - endStr.length;
+  return (d >= 0 && str.lastIndexOf(endStr) === d);
+}
+
 // 类型
 export function typeOf(o) {
-  return o === null ? String(o) : ({}).toString.call(o).slice(8, -1).toLowerCase();
+  return ({}).toString.call(o).slice(8, -1).toLowerCase();
 }
 // 复杂
-export function isFunction(o) { return typeOf(o) === 'function'; }
+export function isFunction(o) { return endWith(typeOf(o), 'function'); }
+export function isAsyncFunction(o) { return typeOf(o) === 'asyncfunction'; }
 export function isObject(o) { return typeOf(o) === 'object'; }
 export function isArray(o) { return typeOf(o) === 'array'; }
 export function isDate(o) { return typeOf(o) === 'date'; }
@@ -14,18 +20,6 @@ export function isNumber(o) { return typeOf(o) === 'number'; }
 // false
 export function isUndefined(o) { return typeOf(o) === 'undefined'; }
 export function isNull(o) { return typeOf(o) === 'null'; }
-
-export function extend(o1 = {}, o2 = {}, override = false) {
-  for (let i in o2) {
-    // eslint-disable-next-line no-prototype-builtins
-    if (o2.hasOwnProperty(i)) {
-      if (o1[i] === undefined || override) {
-        o1[i] = o2[i];
-      }
-    }
-  }
-  return o1;
-}
 
 export function merge(dest = null, src = null) {
   const type1 = typeOf(dest);

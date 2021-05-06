@@ -16,7 +16,7 @@ export default (TS: TinySender, baseConfig: ConfigProps): ((options: AjaxOptions
 
   /** 进度条   相关 ***/
   // 初始化进度条
-  NProgressInit(TS);
+  NProgressInit();
 
   return axios ? axiosCore(axios) : xhrCore;
 };

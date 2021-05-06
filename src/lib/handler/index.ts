@@ -5,7 +5,9 @@ import {
 import NProgress from 'nprogress';
 
 // 加载
-export function loadingHandler(options: AjaxOptionsProps, loading: boolean) {
+export function loadingHandler(
+  options: AjaxOptionsProps, loading: boolean
+) {
   const {
     progress = true,
   } = options;

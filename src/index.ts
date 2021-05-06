@@ -1,104 +1,82 @@
+// 类型定义
 import {
   AjaxOptionsProps,
   ConfigProps,
-  EWindow,
+  blockBeforeFn,
+  blockAfterFn,
 } from '@/index.d';
-
-import { extend } from '@/lib/_';
+// 处理句柄
 import {
   loadingHandler,
 } from '@/lib/handler';
+// 拦截器
 import {
-  after,
+  after, before,
 } from '@/lib/interceptors';
-import Cancel from '@/lib/cancel';  // 取消
-import Result from '@/lib/result';  // 返回
-import Notify from '@/lib/notify/notify';  // 通知
+// 获取核心
 import getCorer from '@/lib/core/get-corer';
+import {
+  isAsyncFunction,
+} from '@/lib/_';
+import * as Notify from '@/lib/notify/notify';
 
 /**
- * @name    TinySender
- * @param   axios
- * @param   config
- *              codeKeys    String-Array
- *              msgKeys     String-Array
- *              notify      Object          自定通知函数
- *              barHeight   Num | Str       进度条高度
+ * TinySender
+ *
+ * @class TinySender
  */
 class TinySender {
-  _window: EWindow;
-  codeKeys: string[];
-  msgKeys: string[];
-  ERR_MSG_NOT_200: string;
-  ERR_MSG_NO_RES: string;
-  notify: any;
-  barEl: any;
-  barHeight: number;
-  barStriped: boolean;
-  CancelToken: any;
+  Notify: any;
   corer: (options: AjaxOptionsProps) => Promise<any>;
-
-  after: (json: any, options: any, TS: any) => Promise<any>
+  blockBefore: blockBeforeFn;
+  blockAfter: blockAfterFn;
   constructor(baseConfig: ConfigProps) {
     const {
-      codeKeys = [],
-      msgKeys = [],
-      errorMsgNot200 = Result.ERR_MSG_NOT_200,
-      errorMsgNoResponse = Result.ERR_MSG_NO_RES,
-      notify,
-      barEl,
-      barHeight,
-      barStriped,
-
-      after,
+      blockBefore,
+      blockAfter,
     } = baseConfig || {};
 
-    // 属性
-    this._window = window;
-    // 兼容 code：[ 'code' ]
-    this.codeKeys = codeKeys || [];
-    // 兼容 msg： ['msg']
-    this.msgKeys = msgKeys || [];
-    // 返回非 200 报错信息
-    this.ERR_MSG_NOT_200 = errorMsgNot200 || Result.ERR_MSG_NOT_200;
-    // 无返回报错信息
-    this.ERR_MSG_NO_RES = errorMsgNoResponse || Result.ERR_MSG_NO_RES;
-    // 自定义通知函数： { error }
-    this.notify = extend(notify, Notify);
-    // 进度条插入位置，默认 body
-    this.barEl = barEl;
-    // 进度条高度：默认 4px
-    this.barHeight = barHeight;
-    // 进度条动画：默认：false
-    this.barStriped = barStriped || false;
-    // 取消
-    this.CancelToken = null;
     // 异步核心
     this.corer = getCorer(this, baseConfig);
 
-    this.after = after;
+    this.blockBefore = blockBefore;
+    this.blockAfter = blockAfter;
+
+    this.Notify = Notify;
   }
 
-  // 发起请求
+  /**
+   * 发起请求
+   * @param url 地址
+   * @param options 参数
+   * @returns {Promise<any>}
+   */
   async ajax(url: string, options: AjaxOptionsProps) {
     options = { url, ...options };
+    options = await before({ options, TS: this });
+    // use before
+    if (isAsyncFunction(this.blockBefore)) {
+      options = await this.blockBefore({ options, TS: this });
+    }
     // 设置加载状态
     loadingHandler(options, true);
 
     try {
-      const json = await this.corer(options);
+      let json = await this.corer(options);
 
       // 取消加载状态
       loadingHandler(options, false);
 
+      json = await after({ json, options, TS: this });
       // use after
-      return await (this.after ? this.after(json, options, this) : after(json, options, this));
+      if (isAsyncFunction(this.blockAfter)) {
+        json = await this.blockAfter({ json, options, TS: this });
+      }
+      return json;
     } catch (err) {
-      // // 取消加载状态
-      // loadingHandler(options, false);
-      // return util.errorHandler(err, {
-      //   uuid
-      // });
+      // 取消加载状态
+      loadingHandler(options, false);
+      return err;
     }
   }
 
@@ -107,22 +85,18 @@ class TinySender {
   }
 
   post(url, options = {}) {
-    extend(options, {
+    Object.assign(options, {
       method: 'post'
     });
     return this.ajax(url, options);
   }
 
   form(url, options = {}) {
-    extend(options, {
+    Object.assign(options, {
       method: 'post',
       norest: true
     });
     return this.ajax(url, options);
-  }
-
-  cancel() {
-    Cancel.cancel();
   }
 }
 

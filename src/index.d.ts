@@ -1,23 +1,12 @@
-export interface EWindow extends Window {
-  TINY_SENDER_CONFIG?: any;
-}
-
 export interface NormalObject {
   [propName: string]: any;
 }
 
 export interface ConfigProps {
-  codeKeys: string[];
-  msgKeys: string[];
-  errorMsgNot200: string;
-  errorMsgNoResponse: string;
-  notify: any;
-  barEl: any;
-  barHeight: number;
-  barStriped: boolean;
+  blockBefore: blockBeforeFn;
+  blockAfter: blockAfterFn;
+  axios?: any;
 
-  after: any;
-  axios: any;
   //
   timeout: number;
   baseUrl: string;
@@ -34,3 +23,15 @@ export interface AjaxOptionsProps {
   progress?: boolean; // progress
   onProgress?: (evt: any) => void; // 进度
 }
+export interface blockReqProps {
+  options: AjaxOptionsProps;
+  TS: any;
+}
+export interface blockResProps {
+  json: any;
+  options: AjaxOptionsProps;
+  TS: any;
+}
+
+export type blockBeforeFn = (o: blockReqProps) => Promise<any> | null;
+export type blockAfterFn = (o: blockResProps) => Promise<any> | null;

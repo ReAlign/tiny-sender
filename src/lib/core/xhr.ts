@@ -3,7 +3,6 @@ import {
   AjaxOptionsProps,
 } from '@/index.d';
 
-import { extend } from '@/lib/_';
 import formatOptions from '@/lib/core/format-options';
 import {
   updatePercentage,
@@ -24,7 +23,7 @@ function transformResponseData(xhr) {
 
 function createError(option) {
   const error = new Error(option.msg);
-  return extend(error, option);
+  return Object.assign(error, option);
 }
 
 export default function XHR_CORE(options: AjaxOptionsProps): Promise<any> {

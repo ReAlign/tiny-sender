@@ -3,7 +3,6 @@ import {
 } from '@/index.d';
 import {
   deepTrim,
-  extend,
   queryString,
 } from '@/lib/_';
 
@@ -28,7 +27,7 @@ const defaultHeaders = {
 const transformUrl = (url, data) => {
   let urlParts = url.split('?');
   let queryObj = queryString.parse(urlParts[1]);
-  queryObj = extend(queryObj, data);
+  queryObj = Object.assign(queryObj, data);
   urlParts[1] = queryString.stringify(queryObj);
   return urlParts.filter(item => !!item).join('?');
 };

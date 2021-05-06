@@ -1,7 +1,7 @@
 {
   "name": "tiny-sender",
-  "description": "A tiny HTTP client, built-in xhr and progress and notify, also can config use axios.",
-  "version": "0.0.3",
+  "description": "A tiny HTTP client for Browser, XHR is used by default, built-in progress-bar and notify, support for custom core, such as axios.",
+  "version": "1.0.0",
   "source": "src/index.ts",
   "main": "dist/tiny-sender.js",
   "module": "dist/tiny-sender.module.js",
@@ -12,6 +12,9 @@
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
   "scripts": {
+    "docs-dev": "typedoc --watch",
+    "docs-build": "typedoc",
+    "docs-site": "gh-pages -d dist-example",
     "rmdist": "rimraf dist/",
     "dev:watch": "microbundle watch --no-compress --external none --css inline --name TinySender --output dist/",
     "dev": "npm run rmdist && npm run dev:watch",

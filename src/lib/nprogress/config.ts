@@ -1,20 +1,14 @@
-export function getConfig(TS: any) {
-  const {
-    barEl = 'body',
-    barHeight = 4,
-    barStriped = false,
-  } = TS;
-
+export function getConfig() {
   const barClasses = [
     'bar',
     'u-progress',
-    `bar-height-${barHeight}`,
-    `${barStriped ? 'a-progress-striped' : ''}`,
+    'bar-height-4',
+    'a-progress-striped',
     'z-act'
   ].join(' ');
 
   return {
-    parent: barEl,
+    parent: 'body',
     showSpinner: false,
     template: `
       <div class="${barClasses}" role="bar">

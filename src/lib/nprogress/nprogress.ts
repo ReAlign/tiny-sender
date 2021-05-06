@@ -5,8 +5,8 @@ import {
 } from './config';
 import NProgressStyle from './style/nprogress.less';
 
-export function NProgressInit(TS: any) {
+export function NProgressInit() {
   injectStyle(NProgressStyle);
-  const _c = getConfig(TS);
+  const _c = getConfig();
   NProgress.configure(_c);
 }
