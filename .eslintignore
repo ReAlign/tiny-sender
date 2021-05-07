@@ -1,2 +1,3 @@
 // .eslintignore
 demo
+.eslintrc.js

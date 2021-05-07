@@ -1,25 +1,12 @@
 <script>
-  import TinySender from "./../../dist/tiny-sender.module";
+  import TS from "./x";
   export const name = "ReAlign";
   export const url =
     "https://nei.netease.com/api/apimock-v2/4ae972b2dabf76b8e92ff52eb5e49441/api/todos/";
 
-  const blockAfter = async (o) => {
-    const {
-      json,
-      TS,
-    } = o;
-
-    if(json.code === 200) {
-      TS.Notify.success('sss');
-    }
-
-    return json;
-  };
-  const tinySender = new TinySender({ blockAfter, });
   const getData = async () => {
     try {
-      const a = await tinySender.get(url);
+      const a = await TS.get(url);
       const x = JSON.stringify(a, null, 2);
       return x;
     } catch (err) {

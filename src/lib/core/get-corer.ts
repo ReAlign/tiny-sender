@@ -2,14 +2,13 @@ import {
   AjaxOptionsProps,
   ConfigProps,
 } from '@/index.d';
-import TinySender from '@/index';
 
 import { NProgressInit } from '@/lib/nprogress/nprogress';
 
 import axiosCore from '@/lib/core/axios';
 import xhrCore from '@/lib/core/xhr';
 
-export default (TS: TinySender, baseConfig: ConfigProps): ((options: AjaxOptionsProps) => Promise<any>) => {
+export default (baseConfig: ConfigProps): ((options: AjaxOptionsProps) => Promise<any>) => {
   const {
     axios,
   } = baseConfig || {};

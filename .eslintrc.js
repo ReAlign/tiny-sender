@@ -17,8 +17,8 @@ module.exports = {
     },
     "sourceType": "module"
   },
-  "parser": "babel-eslint",
-  "plugins": [],
+  "parser": ["babel-eslint", '@typescript-eslint/parser'],
+  'plugins': ['@typescript-eslint'],
   "rules": {
     "quotes": ["error", "single"],
     "linebreak-style": ["error", "unix"]

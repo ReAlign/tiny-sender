@@ -26,18 +26,19 @@ import * as Notify from '@/lib/notify/notify';
  * @class TinySender
  */
 class TinySender {
-  Notify: any;
-  corer: (options: AjaxOptionsProps) => Promise<any>;
-  blockBefore: blockBeforeFn;
-  blockAfter: blockAfterFn;
-  constructor(baseConfig: ConfigProps) {
+  public Notify: any;
+  private corer: (options: AjaxOptionsProps) => Promise<any> | null = null;
+  private blockBefore: blockBeforeFn;
+  private blockAfter: blockAfterFn;
+  constructor() { }
+  public init(baseConfig: ConfigProps) {
     const {
       blockBefore,
       blockAfter,
     } = baseConfig || {};
 
     // 异步核心
-    this.corer = getCorer(this, baseConfig);
+    this.corer = getCorer(baseConfig);
 
     this.blockBefore = blockBefore;
     this.blockAfter = blockAfter;
@@ -51,7 +52,11 @@ class TinySender {
    * @param options 参数
    * @returns {Promise<any>}
    */
-  async ajax(url: string, options: AjaxOptionsProps) {
+  public async ajax(url: string, options: AjaxOptionsProps) {
+    if (this.corer === null) {
+      throw new Error('请先使用 .init(options) 初始化实例。');
+    }
+
     options = { url, ...options };
     options = await before({ options, TS: this });
     // use before
@@ -80,18 +85,18 @@ class TinySender {
     }
   }
 
-  get(url, options = {}) {
+  public get(url, options = {}) {
     return this.ajax(url, options);
   }
 
-  post(url, options = {}) {
+  public post(url, options = {}) {
     Object.assign(options, {
       method: 'post'
     });
     return this.ajax(url, options);
   }
 
-  form(url, options = {}) {
+  public form(url, options = {}) {
     Object.assign(options, {
       method: 'post',
       norest: true
@@ -100,4 +105,4 @@ class TinySender {
   }
 }
 
-export default TinySender;
+export default new TinySender();
