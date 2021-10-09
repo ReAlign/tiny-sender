@@ -2,7 +2,7 @@
   import TS from "./x";
   export const name = "ReAlign";
   export const url =
-    "https://nei.netease.com/api/apimock-v2/4ae972b2dabf76b8e92ff52eb5e49441/api/todos/";
+    "/api/as";
 
   const getData = async () => {
     try {

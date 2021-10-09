@@ -17,5 +17,5 @@ export default (baseConfig: ConfigProps): ((options: AjaxOptionsProps) => Promis
   // 初始化进度条
   NProgressInit();
 
-  return axios ? axiosCore(axios) : xhrCore;
+  return axios ? axiosCore(baseConfig) : xhrCore(baseConfig);
 };

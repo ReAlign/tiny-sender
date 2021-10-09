@@ -1,6 +1,7 @@
 // https://blog.csdn.net/hahahhahahahha123456/article/details/80608568
 import {
   AjaxOptionsProps,
+  ConfigProps,
 } from '@/index.d';
 
 import formatOptions from '@/lib/core/format-options';
@@ -26,75 +27,81 @@ function createError(option) {
   return Object.assign(error, option);
 }
 
-export default function XHR_CORE(options: AjaxOptionsProps): Promise<any> {
+export default (baseConfig: ConfigProps) => {
   const {
-    url,
-    method,
-    timeout,
-    headers,
-    data,
-    onProgress,
-  } = formatOptions(options);
-  return new Promise(
-    (
-      resolve: (data: any) => void,
-      reject: (err: any) => void
-    ) => {
-    const xhr = new XMLHttpRequest();
+    baseUrl = '',
+  } = baseConfig;
 
-    xhr.open(method, url);
-    xhr.withCredentials = false;
+  return function XHR_CORE(options: AjaxOptionsProps): Promise<any> {
+    const {
+      url,
+      method,
+      timeout,
+      headers,
+      data,
+      onProgress,
+    } = formatOptions(options);
+    return new Promise(
+      (
+        resolve: (data: any) => void,
+        reject: (err: any) => void
+      ) => {
+      const xhr = new XMLHttpRequest();
 
-    for (let key in headers) {
-      xhr.setRequestHeader(key, headers[key]);
-    }
+      xhr.open(method, `${baseUrl}${url}`);
+      xhr.withCredentials = false;
 
-    xhr.timeout = timeout;
-    xhr.ontimeout = () => {
-      reject(createError({
-        msg: `request error: Time out!, request url: ${url}`,
-        timeout: true,
-      }));
-    };
-
-    xhr.upload.onprogress  = xhr.onprogress = (evt) => {
-      updatePercentage(evt);
-      onProgress && onProgress(evt);
-    };
-
-    xhr.onreadystatechange = () => {
-      if (!xhr || xhr.readyState !== 4) {
-        return;
+      for (let key in headers) {
+        xhr.setRequestHeader(key, headers[key]);
       }
 
-      const status = xhr.status;
-      // credit: Axios
-      // The request errored out and we didn't get a response, this will be
-      // handled by onerror instead
-      // With one exception: request that using file: protocol, most browsers
-      // will return status as 0 even though it's a successful request
-      if (status === 0) {
-        return;
-      }
-      const responseData = transformResponseData(xhr);
-      if (status === 200) {
-        resolve(responseData);
-      } else {
+      xhr.timeout = timeout;
+      xhr.ontimeout = () => {
         reject(createError({
-          msg: `response error with status code ${status}`,
-          status,
-          response: responseData
+          msg: `request error: Time out!, request url: ${url}`,
+          timeout: true,
         }));
-      }
-    };
+      };
 
-    xhr.onerror = (e) => {
-      reject(createError({
-        msg: `request error: ${e}, request url: ${url}`,
-        status: 0
-      }));
-    };
+      xhr.upload.onprogress  = xhr.onprogress = (evt) => {
+        updatePercentage(evt);
+        onProgress && onProgress(evt);
+      };
 
-    xhr.send(data);
-  });
+      xhr.onreadystatechange = () => {
+        if (!xhr || xhr.readyState !== 4) {
+          return;
+        }
+
+        const status = xhr.status;
+        // credit: Axios
+        // The request errored out and we didn't get a response, this will be
+        // handled by onerror instead
+        // With one exception: request that using file: protocol, most browsers
+        // will return status as 0 even though it's a successful request
+        if (status === 0) {
+          return;
+        }
+        const responseData = transformResponseData(xhr);
+        if (status === 200) {
+          resolve(responseData);
+        } else {
+          reject(createError({
+            msg: `response error with status code ${status}`,
+            status,
+            response: responseData
+          }));
+        }
+      };
+
+      xhr.onerror = (e) => {
+        reject(createError({
+          msg: `request error: ${e}, request url: ${url}`,
+          status: 0
+        }));
+      };
+
+      xhr.send(data);
+    });
+  }
 }

@@ -13,4 +13,4 @@ const blockAfter = async (o) => {
   return json;
 };
 
-export default TinySender.getIt({ blockAfter, });
+export default TinySender.getIt({ blockAfter, baseUrl: 'https://api.realign.cn' });
