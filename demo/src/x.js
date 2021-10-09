@@ -13,6 +13,4 @@ const blockAfter = async (o) => {
   return json;
 };
 
-// TinySender.init({ blockAfter, });
-
-export default TinySender;
+export default TinySender.getIt({ blockAfter, });

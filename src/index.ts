@@ -16,7 +16,7 @@ import {
 // 获取核心
 import getCorer from '@/lib/core/get-corer';
 import {
-  isAsyncFunction,
+  isFunction,
 } from '@/lib/_';
 import * as Notify from '@/lib/notify/notify';
 
@@ -26,12 +26,12 @@ import * as Notify from '@/lib/notify/notify';
  * @class TinySender
  */
 class TinySender {
+  private static it: TinySender;
   public Notify: any;
   private corer: (options: AjaxOptionsProps) => Promise<any> | null = null;
   private blockBefore: blockBeforeFn;
   private blockAfter: blockAfterFn;
-  constructor() { }
-  public init(baseConfig: ConfigProps) {
+  private constructor(baseConfig: ConfigProps) {
     const {
       blockBefore,
       blockAfter,
@@ -45,6 +45,12 @@ class TinySender {
 
     this.Notify = Notify;
   }
+  static getIt(baseConfig: ConfigProps) {
+    if (!this.it) {
+      this.it = new TinySender(baseConfig);
+    }
+    return this.it;
+  }
 
   /**
    * 发起请求
@@ -53,14 +59,10 @@ class TinySender {
    * @returns {Promise<any>}
    */
   public async ajax(url: string, options: AjaxOptionsProps) {
-    if (this.corer === null) {
-      throw new Error('请先使用 .init(options) 初始化实例。');
-    }
-
     options = { url, ...options };
     options = await before({ options, TS: this });
     // use before
-    if (isAsyncFunction(this.blockBefore)) {
+    if (isFunction(this.blockBefore)) {
       options = await this.blockBefore({ options, TS: this });
     }
     // 设置加载状态
@@ -74,7 +76,7 @@ class TinySender {
 
       json = await after({ json, options, TS: this });
       // use after
-      if (isAsyncFunction(this.blockAfter)) {
+      if (isFunction(this.blockAfter)) {
         json = await this.blockAfter({ json, options, TS: this });
       }
       return json;
@@ -105,4 +107,4 @@ class TinySender {
   }
 }
 
-export default new TinySender();
+export default TinySender;

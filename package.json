@@ -1,7 +1,7 @@
 {
   "name": "tiny-sender",
   "description": "A tiny HTTP client for Browser, XHR is used by default, built-in progress-bar and notify, support for custom core, such as axios.",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "source": "src/index.ts",
   "main": "dist/tiny-sender.js",
   "module": "dist/tiny-sender.module.js",
